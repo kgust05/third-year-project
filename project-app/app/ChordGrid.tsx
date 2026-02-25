@@ -46,18 +46,15 @@ export default function ChordGrid(
 
   function createButton(chord : string, bar : number) {
     if (checkValidChord(chord, bar)) {
-      let colourString;
+      let styleString;
 
-      if (currentProg[bar] == chord) {
-        colourString = "bg-fuchsia-600 text-white hover:bg-fuchsia-400 active:bg-fuchsia-200";
-      } else {
-        colourString = "bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400";
-      }
+      if (currentProg[bar] == chord) styleString = "bg-fuchsia-600 text-white hover:bg-fuchsia-400 active:bg-fuchsia-200";
+        else styleString = "bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400";
 
       return (
         <button
           key={(bar + 1) + chord}
-          className={"w-1/2 rounded-full " + colourString}
+          className={"w-1/2 rounded-full " + styleString}
           onClick={() => onUpdateCurrentProg(chord, bar)}
         >
           {chord}
@@ -87,7 +84,7 @@ export default function ChordGrid(
   }
 
   return (
-    <div className={`grid m-8 grid-flow-row grid-cols-4 gap-1 place-items-center`}>
+    <div className={"grid m-8 grid-flow-row grid-cols-4 gap-1 place-items-center"}>
       {chordGrid}
     </div>
   )

@@ -1,5 +1,6 @@
 'use client';
 import ChordGrid from "./ChordGrid";
+import RhythmGrid from "./RhythmGrid";
 import Stave from "./Stave";
 import {useReducer} from "react";
 
@@ -12,13 +13,29 @@ export default function MyApp() {
     ["C", "F", "Am", "G"]
   ]
 
-  const [currentProg, dispatch] = useReducer(progReducer, Array(4).fill(""));
+  const rhythms = [
+    "q q. q.",
+    "q. q. q",
+    "q 8 q 8 q",
+    "h q q",
+    "h h"
+  ]
+
+  const [currentProg, progDispatch] = useReducer(progReducer, Array(4).fill(""));
+  const [currentRhythm, rhythmDispatch] = useReducer(rhythmReducer, "w");
 
   function handleUpdateCurrentProg(chord : string, index : number) {
-    dispatch({
+    progDispatch({
       type: "update",
       chord: chord,
       index: index
+    })
+  }
+
+  function handleUpdateCurrentRhythm(rhythm : string) {
+    rhythmDispatch({
+      type: "update",
+      rhythm: rhythm
     })
   }
 
@@ -43,16 +60,29 @@ export default function MyApp() {
     }
   }
 
+  function rhythmReducer(currentRhythm : string, action : any) {
+    switch (action.type) {
+      case "update": {
+        return action.rhythm;
+      }
+    }
+  }
+
   return (
     <div>
       <Stave
         prog={currentProg}
-        rhythm={"w"}
+        rhythm={currentRhythm}
       />
       <ChordGrid
         progs={progs}
         currentProg={currentProg}
         onUpdateCurrentProg={handleUpdateCurrentProg}
+      />
+      <RhythmGrid
+        rhythms={rhythms}
+        currentRhythm={currentRhythm}
+        onUpdateCurrentRhythm={handleUpdateCurrentRhythm}
       />
     </div>
   )
