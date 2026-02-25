@@ -2,6 +2,7 @@
 import ChordGrid from "./ChordGrid";
 import RhythmGrid from "./RhythmGrid";
 import Stave from "./Stave";
+import Instrument from "./Instrument";
 import {useReducer} from "react";
 
 export default function MyApp() {
@@ -20,6 +21,8 @@ export default function MyApp() {
     "h q q",
     "h h"
   ]
+
+  let testGroup = Array();
 
   const [currentProg, progDispatch] = useReducer(progReducer, Array(4).fill(""));
   const [currentRhythm, rhythmDispatch] = useReducer(rhythmReducer, "w");
@@ -68,21 +71,25 @@ export default function MyApp() {
     }
   }
 
+  for (let i = 0; i < 4; i++) {
+    testGroup.push(
+      <div key={`i${i}`}>
+        <Instrument
+          instrument={`i${i}`}
+          prog={currentProg}
+          rhythms={rhythms}
+        />
+      </div>
+    )
+  }
+
   return (
     <div>
-      <Stave
-        prog={currentProg}
-        rhythm={currentRhythm}
-      />
+      {testGroup}
       <ChordGrid
         progs={progs}
         currentProg={currentProg}
         onUpdateCurrentProg={handleUpdateCurrentProg}
-      />
-      <RhythmGrid
-        rhythms={rhythms}
-        currentRhythm={currentRhythm}
-        onUpdateCurrentRhythm={handleUpdateCurrentRhythm}
       />
     </div>
   )

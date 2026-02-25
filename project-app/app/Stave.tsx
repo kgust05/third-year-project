@@ -1,7 +1,10 @@
 import {useRef, useEffect} from "react";
 import VexFlow from "vexflow";
 
-export default function Stave({prog, rhythm} : {prog : string[], rhythm : string}) {
+export default function Stave(
+  {prog, rhythm, instrument} : 
+  {prog : string[], rhythm : string, instrument : string}
+) {
   const staveRef = useRef<HTMLDivElement>(null);
   const scale = ["A", "B", "C", "D", "E", "F", "G"];
 
@@ -32,7 +35,7 @@ export default function Stave({prog, rhythm} : {prog : string[], rhythm : string
     const notes4 = barSolver(prog[3]);
 
     const factory = new VexFlow.Factory({
-      renderer: { elementId: "output", width: 801, height: 200 },
+      renderer: { elementId: instrument, width: 801, height: 200 },
     });
 
     const score = factory.EasyScore();
@@ -75,6 +78,6 @@ export default function Stave({prog, rhythm} : {prog : string[], rhythm : string
   })
 
   return (
-    <div ref={staveRef} id="output" className=" m-8 place-items-center"></div>
+    <div ref={staveRef} id={instrument} className=" m-8 place-items-center"></div>
   )
 }
