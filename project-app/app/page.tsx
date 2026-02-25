@@ -1,5 +1,6 @@
 'use client';
 import ChordGrid from "./ChordGrid";
+import Stave from "./Stave";
 import {useReducer} from "react";
 
 export default function MyApp() {
@@ -44,6 +45,10 @@ export default function MyApp() {
 
   return (
     <div>
+      <Stave
+        prog={currentProg}
+        rhythm={"w"}
+      />
       <ChordGrid
         progs={progs}
         currentProg={currentProg}
