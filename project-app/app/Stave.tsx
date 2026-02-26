@@ -35,7 +35,7 @@ export default function Stave(
     const notes4 = barSolver(prog[3]);
 
     const factory = new VexFlow.Factory({
-      renderer: { elementId: instrument, width: 801, height: 200 },
+      renderer: { elementId: `${instrument}Stave`, width: 801, height: 150 },
     });
 
     const score = factory.EasyScore();
@@ -78,6 +78,6 @@ export default function Stave(
   })
 
   return (
-    <div ref={staveRef} id={instrument} className=" m-8 place-items-center"></div>
+    <div ref={staveRef} id={`${instrument}Stave`} className=" m-8 place-items-center"></div>
   )
 }

@@ -1,9 +1,7 @@
 'use client';
 import ChordGrid from "./ChordGrid";
-import RhythmGrid from "./RhythmGrid";
-import Stave from "./Stave";
-import Instrument from "./Instrument";
-import {useReducer} from "react";
+import InstrumentList from "./InstrumentList";
+import {useReducer, useState} from "react";
 
 export default function MyApp() {
   const progs = [
@@ -22,23 +20,20 @@ export default function MyApp() {
     "h h"
   ]
 
-  let testGroup = Array();
+  const instruments = [
+    "melody",
+    "guitar",
+    "keys",
+    "bass"
+  ]
 
   const [currentProg, progDispatch] = useReducer(progReducer, Array(4).fill(""));
-  const [currentRhythm, rhythmDispatch] = useReducer(rhythmReducer, "w");
 
   function handleUpdateCurrentProg(chord : string, index : number) {
     progDispatch({
       type: "update",
       chord: chord,
       index: index
-    })
-  }
-
-  function handleUpdateCurrentRhythm(rhythm : string) {
-    rhythmDispatch({
-      type: "update",
-      rhythm: rhythm
     })
   }
 
@@ -63,29 +58,13 @@ export default function MyApp() {
     }
   }
 
-  function rhythmReducer(currentRhythm : string, action : any) {
-    switch (action.type) {
-      case "update": {
-        return action.rhythm;
-      }
-    }
-  }
-
-  for (let i = 0; i < 4; i++) {
-    testGroup.push(
-      <div key={`i${i}`}>
-        <Instrument
-          instrument={`i${i}`}
-          prog={currentProg}
-          rhythms={rhythms}
-        />
-      </div>
-    )
-  }
-
   return (
     <div>
-      {testGroup}
+      <InstrumentList
+        instruments={instruments}
+        prog={currentProg}
+        rhythms={rhythms}
+      />
       <ChordGrid
         progs={progs}
         currentProg={currentProg}
