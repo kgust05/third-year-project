@@ -1,17 +1,31 @@
 import Instrument from "./Instrument";
-import {useState, useReducer} from "react";
+import {useReducer} from "react";
 
 export default function InstrumentList(
   {instruments, prog, rhythms} :
   {instruments : string[], prog : string[], rhythms : string[]}
 ) {
-  const [enabledInstruments, setEnabledInstruments] = useState(Array(instruments.length).fill(false));
+  const [currentInstruments, dispatch] = useReducer(instrumentReducer, Array(instruments.length).fill(false));
 
-  function handleUpdateEnabledInstruments(index : number) {
-    let updatedArray = enabledInstruments;
+  function handleUpdateInstruments(index : number) {
+    dispatch({
+      type: "update",
+      index: index
+    })
+  }
 
-    updatedArray[index] = !updatedArray[index];
-    setEnabledInstruments(updatedArray);
+  function instrumentReducer(currentInstruments : boolean[], action : any) {
+    switch (action.type) {
+      case "update": {
+        return currentInstruments.map((c, i) => {
+          if (action.index == i) return !c;
+          return c;
+        })
+      }
+      default: {
+        return currentInstruments;
+      }
+    }
   }
 
   let instrumentList = Array();
@@ -20,7 +34,7 @@ export default function InstrumentList(
     const index = instruments.indexOf(i);
     let styleString;
 
-    if (enabledInstruments[index]) {
+    if (currentInstruments[index]) {
       styleString = "bg-fuchsia-600 text-white hover:bg-fuchsia-400 active:bg-fuchsia-200";
       instrumentList.push(
         <div
@@ -28,7 +42,7 @@ export default function InstrumentList(
         >
           <button
             className={"w-2/5 rounded-full " + styleString}
-            onClick={() => handleUpdateEnabledInstruments(index)}
+            onClick={() => handleUpdateInstruments(index)}
           >
             Toggle {i}
           </button>
@@ -48,7 +62,7 @@ export default function InstrumentList(
         >
           <button
             className={"w-2/5 rounded-full " + styleString}
-            onClick={() => handleUpdateEnabledInstruments(index)}
+            onClick={() => handleUpdateInstruments(index)}
           >
             Toggle {i}
           </button>
