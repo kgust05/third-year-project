@@ -13,7 +13,7 @@ export default function RhythmGrid(
     rhythmGrid.push(
       <button
         key={rhythms.indexOf(r) + 1}
-        className={"w-1/2 rounded-full " + styleString}
+        className={"w-30 h-12 rounded-full " + styleString}
         onClick={() => onUpdateCurrentRhythm(r)}
       >
         Rhythm {rhythms.indexOf(r) + 1}
@@ -22,8 +22,11 @@ export default function RhythmGrid(
   }
 
   return (
-    <div className={"grid m-8 grid-flow-row grid-cols-4 gap-1 place-items-center"}>
-      {rhythmGrid}
+    <div>
+      <h1 className="text-3xl text-center m-8">Choose your rhythm</h1>
+      <div className={"grid m-8 grid-flow-row grid-cols-4 gap-3 place-items-center"}>
+        {rhythmGrid}
+      </div>
     </div>
   )
 }

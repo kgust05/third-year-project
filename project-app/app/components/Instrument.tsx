@@ -25,6 +25,7 @@ export default function Instrument(
 
   return (
     <div>
+      <h1 className="text-3xl text-center m-8">{instrument} line</h1>
       <Stave
         instrument={instrument}
         prog={prog}

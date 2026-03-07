@@ -41,7 +41,7 @@ export default function InstrumentList(
           key={i}
         >
           <button
-            className={"w-2/5 rounded-full " + styleString}
+            className={"w-36 h-12 rounded-full " + styleString}
             onClick={() => handleUpdateInstruments(index)}
           >
             Toggle {i}
@@ -61,7 +61,7 @@ export default function InstrumentList(
           key={i}
         >
           <button
-            className={"w-2/5 rounded-full " + styleString}
+            className={"w-36 h-12 rounded-full " + styleString}
             onClick={() => handleUpdateInstruments(index)}
           >
             Toggle {i}
@@ -72,7 +72,8 @@ export default function InstrumentList(
   }
 
   return (
-    <div>
+    <div className="grid gap-3 grid-cols-1 place-items-center">
+      <h1 className="text-3xl text-center m-8">Choose your instruments</h1>
       {instrumentList}
     </div>
   )

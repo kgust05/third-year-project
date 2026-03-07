@@ -6,18 +6,17 @@ import Link from "next/link";
 
 export default function Page() {
   const progs = [
-    ["Am", "F", "C", "G"],
+    ["C", "Dm", "Am", "F"],
+    ["C", "Am", "Dm", "G"],
     ["C", "Am", "F", "G"],
-    ["F", "Am", "C", "G"],
-    ["C", "G", "Am", "F"],
-    ["C", "F", "Am", "G"]
+    ["Dm", "G", "C", "Am"],
+    ["C", "F", "Dm", "G"]
   ]
 
   const rhythms = [
-    "q q. q.",
     "q. q. q",
-    "q 8 q 8 q",
-    "h q q",
+    "h. q",
+    "8 h 8 8 8",
     "h h"
   ]
 
@@ -61,12 +60,12 @@ export default function Page() {
 
   return (
     <div>
-      <h1 className="text-4xl text-center m-8">Bastille - Pompeii</h1>
+      <h1 className="text-4xl text-center m-8">Chappell Roan - Pink Pony Club</h1>
       <p className="text-lg text-center">
         Insert descrption here.<br></br>
         Can include song's genre, its rhythms and chords,
         how they relate to other songs, e.g. similar chords/rhythms to get
-        a similar sound, etc.<br></br>
+        a similar sound, mentions of similar songs, etc.<br></br>
         Essentially, additional information to allow a user to appreciate the <b>why </b>
         of the sound of the song that comes with the <b>how.</b>
       </p>

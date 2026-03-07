@@ -54,7 +54,7 @@ export default function ChordGrid(
       return (
         <button
           key={(bar + 1) + chord}
-          className={"w-1/2 rounded-full " + styleString}
+          className={"w-24 h-12 rounded-full " + styleString}
           onClick={() => onUpdateCurrentProg(chord, bar)}
         >
           {chord}
@@ -65,7 +65,7 @@ export default function ChordGrid(
     return (
       <button
         key={(bar + 1) + chord}
-        className="w-1/2 rounded-full bg-gray-500"
+        className="w-24 h-12 rounded-full bg-gray-500 text-black"
         disabled
       >
         {chord}
@@ -76,7 +76,7 @@ export default function ChordGrid(
   for (let r = 0; r < uniqueChords.length + 1; r++) {
     for (let c = 0; c < 4; c++) {
         if (r == 0) {
-            chordGrid.push(<h1 key={c + 1}>{c + 1}</h1>);
+            chordGrid.push(<h1 key={c + 1} className="text-2xl">Bar {c + 1}</h1>);
         } else {
             chordGrid.push(createButton(uniqueChords[r - 1], c));
         }
@@ -84,8 +84,11 @@ export default function ChordGrid(
   }
 
   return (
-    <div className={"grid m-8 grid-flow-row grid-cols-4 gap-1 place-items-center"}>
-      {chordGrid}
+    <div>
+      <h1 className="text-3xl text-center m-8">Choose your chords</h1>
+      <div className={"grid m-8 grid-flow-row grid-cols-4 gap-3 place-items-center"}>
+        {chordGrid}
+      </div>
     </div>
   )
 }
