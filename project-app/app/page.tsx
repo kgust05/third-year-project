@@ -10,15 +10,9 @@ export default function Page() {
         not just <b>how.</b>
       </p>
       <h1 className="text-4xl text-center m-8">Song List (more added in the future)</h1>
-      <Link href="/song1">
+      <Link href="/song">
         <button className="w-40 h-16 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400 m-8">
           Bastille - Pompeii
-        </button>
-      </Link>
-
-      <Link href="/song2">
-        <button className="w-56 h-16 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400 m-8">
-          Chappell Roan - Pink Pony Club
         </button>
       </Link>
     </div>
