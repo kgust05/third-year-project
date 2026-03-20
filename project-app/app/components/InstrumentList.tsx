@@ -2,8 +2,8 @@ import Instrument from "./Instrument";
 import {useReducer} from "react";
 
 export default function InstrumentList(
-  {instruments, prog, rhythms} :
-  {instruments : string[], prog : string[], rhythms : string[]}
+  {instruments, prog, keySig, rhythms} :
+  {instruments : string[], prog : string[], keySig : string, rhythms : string[]}
 ) {
   const [currentInstruments, dispatch] = useReducer(instrumentReducer, Array(instruments.length).fill(false));
 
@@ -49,6 +49,7 @@ export default function InstrumentList(
           <Instrument
             instrument={i}
             prog={prog}
+            keySig={keySig}
             rhythms={rhythms}
           />
         </div>

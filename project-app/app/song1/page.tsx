@@ -6,12 +6,19 @@ import Link from "next/link";
 
 export default function Page() {
   const progs = [
-    ["Am", "F", "C", "G"],
-    ["C", "Am", "F", "G"],
-    ["F", "Am", "C", "G"],
-    ["C", "G", "Am", "F"],
-    ["C", "F", "Am", "G"]
+    // ["Am", "F", "C", "G"],
+    // ["C", "Am", "F", "G"],
+    // ["F", "Am", "C", "G"],
+    // ["C", "G", "Am", "F"],
+    // ["C", "F", "Am", "G"]
+    ["6 minor", "4 major", "1 major", "5 major"],
+    ["1 major", "6 minor", "4 major", "5 major"],
+    ["4 major", "6 minor", "1 major", "5 major"],
+    ["1 major", "5 major", "6 minor", "4 major"],
+    ["1 major", "4 major", "6 minor", "5 major"]
   ]
+
+  const keySig = "A major";
 
   const rhythms = [
     "q q. q.",
@@ -78,6 +85,7 @@ export default function Page() {
       <InstrumentList
         instruments={instruments}
         prog={currentProg}
+        keySig={keySig}
         rhythms={rhythms}
       />
       <ChordGrid

@@ -3,8 +3,8 @@ import Stave from "./Stave";
 import {useReducer} from "react";
 
 export default function Instrument(
-  {instrument, prog, rhythms} :
-  {instrument : string, prog : string[], rhythms : string[]}
+  {instrument, prog, keySig, rhythms} :
+  {instrument : string, prog : string[], keySig : string, rhythms : string[]}
 ) {
   const [currentRhythm, dispatch] = useReducer(rhythmReducer, "w");
 
@@ -29,6 +29,8 @@ export default function Instrument(
       <Stave
         instrument={instrument}
         prog={prog}
+        keySig={keySig}
+        octave={4}
         rhythm={currentRhythm}
       />
       <RhythmGrid
