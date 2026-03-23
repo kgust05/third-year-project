@@ -1,6 +1,40 @@
+"use client";
+import {getAllData} from "@/app/lib/data";
+import {useState, useEffect} from "react";
 import Link from "next/link";
 
 export default function Page() {
+  const [songs, setSongs] = useState(Array());
+  const [dataLoaded, setDataLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!dataLoaded) {
+      getAllData().then(data => setSongs(data));
+      setDataLoaded(true);
+    }
+  })
+
+  function displayAllLinks() {
+    return songs.map(c => {
+      return (
+        <div key={c.song_id}>
+          <Link
+          href={{
+            pathname: "/song",
+            query: {
+              song_id: c.song_id
+            }
+          }}
+          >
+            <button className="w-40 h-16 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400 m-8">
+              {c.artist} - {c.name}
+            </button>
+          </Link>
+        </div>
+      )
+    })
+  }
+
   return (
     <div className="grid cols-1 place-items-center">
       <h1 className="text-6xl text-center m-8">aMuse</h1>
@@ -10,11 +44,7 @@ export default function Page() {
         not just <b>how.</b>
       </p>
       <h1 className="text-4xl text-center m-8">Song List (more added in the future)</h1>
-      <Link href="/song">
-        <button className="w-40 h-16 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400 m-8">
-          Bastille - Pompeii
-        </button>
-      </Link>
+      {displayAllLinks()}
     </div>
   )  
 }

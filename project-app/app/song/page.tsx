@@ -1,39 +1,32 @@
-'use client';
+"use client";
+import {getSongData} from "@/app/lib/data";
 import ChordGrid from "@/app/components/ChordGrid";
 import InstrumentList from "@/app/components/InstrumentList";
-import {useReducer} from "react";
+import {useState, useReducer, useEffect} from "react";
 import Link from "next/link";
+import {useSearchParams} from "next/navigation";
 
 export default function Page() {
-  const progs = [
-    // ["Am", "F", "C", "G"],
-    // ["C", "Am", "F", "G"],
-    // ["F", "Am", "C", "G"],
-    // ["C", "G", "Am", "F"],
-    // ["C", "F", "Am", "G"]
-    ["6 minor", "4 major", "1 major", "5 major"],
-    ["1 major", "6 minor", "4 major", "5 major"],
-    ["4 major", "6 minor", "1 major", "5 major"],
-    ["1 major", "5 major", "6 minor", "4 major"],
-    ["1 major", "4 major", "6 minor", "5 major"]
-  ]
+  const searchParams = useSearchParams();
+  const [progs, setProgs] = useState([["1 major", "1 major", "1 major", "1 major"]]);
+  const [keySig, setKeySig] = useState("C major");
+  const [rhythms, setRhythms] = useState(["w"]);
+  const [instruments, setInstruments] = useState(["Melody"]);
+  const [dataLoaded, setDataLoaded] = useState(false);
+  
+  function setData(data : any) {
+    setProgs(data.progressions);
+    setKeySig(data.key_signature);
+    setRhythms(data.rhythms);
+    setInstruments(data.instruments);
+  }
 
-  const keySig = "A major";
-
-  const rhythms = [
-    "q q. q.",
-    "q. q. q",
-    "q 8 q 8 q",
-    "h q q",
-    "h h"
-  ]
-
-  const instruments = [
-    "Melody",
-    "Guitar",
-    "Keys",
-    "Bass"
-  ]
+  useEffect(() => {
+    if (!dataLoaded) {
+      getSongData(parseInt(searchParams.get("song_id")!)).then(data => setData(data));
+      setDataLoaded(true);
+    }
+  })
 
   const [currentProg, progDispatch] = useReducer(progReducer, Array(4).fill(""));
 
@@ -66,6 +59,8 @@ export default function Page() {
     }
   }
 
+
+
   return (
     <div>
       <h1 className="text-4xl text-center m-8">Bastille - Pompeii</h1>
@@ -77,6 +72,7 @@ export default function Page() {
         Essentially, additional information to allow a user to appreciate the <b>why </b>
         of the sound of the song that comes with the <b>how.</b>
       </p>
+      <p>{}</p>
       <Link href="/">
         <button className="w-36 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400 m-8">
           Back to Menu
