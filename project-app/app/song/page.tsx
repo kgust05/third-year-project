@@ -13,12 +13,18 @@ export default function Page() {
   const [rhythms, setRhythms] = useState(["w"]);
   const [instruments, setInstruments] = useState(["Melody"]);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [name, setName] = useState("");
+  const [artist, setArtist] = useState("");
+  const [desc, setDesc] = useState(null);
   
   function setData(data : any) {
-    setProgs(data.progressions);
-    setKeySig(data.key_signature);
+    setProgs(data.progs);
+    setKeySig(data.key_sig);
     setRhythms(data.rhythms);
     setInstruments(data.instruments);
+    setName(data.name);
+    setArtist(data.artist);
+    setDesc(data.description);
   }
 
   useEffect(() => {
@@ -63,16 +69,8 @@ export default function Page() {
 
   return (
     <div>
-      <h1 className="text-4xl text-center m-8">Bastille - Pompeii</h1>
-      <p className="text-lg text-center">
-        Insert descrption here.<br></br>
-        Can include song's genre, its rhythms and chords,
-        how they relate to other songs, e.g. similar chords/rhythms to get
-        a similar sound, etc.<br></br>
-        Essentially, additional information to allow a user to appreciate the <b>why </b>
-        of the sound of the song that comes with the <b>how.</b>
-      </p>
-      <p>{}</p>
+      <h1 className="text-4xl text-center m-8">{artist} - {name}</h1>
+      <p className="text-lg text-center">{desc}</p>
       <Link href="/">
         <button className="w-36 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400 m-8">
           Back to Menu

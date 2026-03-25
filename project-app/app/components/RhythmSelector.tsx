@@ -84,6 +84,7 @@ export default function RhythmSelector(
       if (dot) return (
         <div>
           <button
+            type="button"
             className="w-36 h-12 rounded-full bg-fuchsia-600 text-white hover:bg-fuchsia-400 active:bg-fuchsia-200"
             onClick={() => handleUpdateDot()}
           >
@@ -94,6 +95,7 @@ export default function RhythmSelector(
       else return (
         <div>
           <button
+            type="button"
             className="w-36 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400"
             onClick={() => handleUpdateDot()}
           >
@@ -104,6 +106,7 @@ export default function RhythmSelector(
     } else return (
         <div>
           <button
+            type="button"
             className="w-36 h-12 rounded-full bg-gray-500 text-black"
             disabled
           >
@@ -117,6 +120,7 @@ export default function RhythmSelector(
     if (rest) return (
       <div>
         <button
+          type="button"
           className="w-36 h-12 rounded-full bg-fuchsia-600 text-white hover:bg-fuchsia-400 active:bg-fuchsia-200"
           onClick={() => handleUpdateRest()}
         >
@@ -127,6 +131,7 @@ export default function RhythmSelector(
     else return (
       <div>
         <button
+          type="button"
           className="w-36 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400"
           onClick={() => handleUpdateRest()}
         >
@@ -140,6 +145,7 @@ export default function RhythmSelector(
     if (validNote(getLength(false))) return (
         <div>
           <button
+            type="button"
             className="w-36 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400"
             onClick={() => addNote()}
           >
@@ -150,6 +156,7 @@ export default function RhythmSelector(
     else return (
       <div>
         <button
+          type="button"
           className="w-36 h-12 rounded-full bg-gray-500 text-black"
           disabled
         >
@@ -184,6 +191,7 @@ export default function RhythmSelector(
       {createAddButton()}
       <div>
         <button
+          type="button"
           className="w-36 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400"
           onClick={() => onDeleteNote()}
         >

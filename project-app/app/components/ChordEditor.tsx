@@ -52,6 +52,7 @@ export default function ChordEditor(
         />
       </div>
       <button
+        type="button"
         className="w-36 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400"
         onClick={() => onUpdateProgs("add", undefined, chords)}
       >
