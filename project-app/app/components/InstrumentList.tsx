@@ -2,8 +2,8 @@ import Instrument from "./Instrument";
 import {useReducer, useState, useEffect} from "react";
 
 export default function InstrumentList(
-  {instruments, prog, keySig, rhythms} :
-  {instruments : string[], prog : string[], keySig : string, rhythms : string[]}
+  {instruments, prog, keySig, rhythms, onUpdateRhythms} :
+  {instruments : any[], prog : string[], keySig : string, rhythms : string[], onUpdateRhythms : Function}
 ) {
   const [currentInstruments, dispatch] = useReducer(instrumentReducer, Array(instruments.length).fill(false));
   const [instrumentState, setInstruments] = useState(instruments);
@@ -13,6 +13,7 @@ export default function InstrumentList(
       type: "update",
       index: index
     })
+    onUpdateRhythms("", index);
   }
 
   function handleResetInstruments() {
@@ -55,19 +56,21 @@ export default function InstrumentList(
       styleString = "bg-fuchsia-600 text-white hover:bg-fuchsia-400 active:bg-fuchsia-200";
       instrumentList.push(
         <div
-          key={i}
+          key={i.name}
         >
           <button
             className={"w-36 h-12 rounded-full " + styleString}
             onClick={() => handleUpdateInstruments(index)}
           >
-            Toggle {i}
+            Toggle {i.name}
           </button>
           <Instrument
-            instrument={i}
+            instrument={JSON.stringify(i)}
             prog={prog}
             keySig={keySig}
             rhythms={rhythms}
+            onUpdateRhythms={onUpdateRhythms}
+            index={instruments.indexOf(i)}
           />
         </div>
       )
@@ -76,13 +79,13 @@ export default function InstrumentList(
       styleString = "bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400";
       instrumentList.push(
         <div
-          key={i}
+          key={i.name}
         >
           <button
             className={"w-36 h-12 rounded-full " + styleString}
             onClick={() => handleUpdateInstruments(index)}
           >
-            Toggle {i}
+            Toggle {i.name}
           </button>
         </div>
       )

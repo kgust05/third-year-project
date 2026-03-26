@@ -3,10 +3,15 @@ import VexFlow from "vexflow";
 import {Scale, Chord} from "tonal";
 
 export default function Stave(
-  {prog, keySig, octave, rhythm, instrument} : 
-  {prog : string[], keySig : string, octave : number, rhythm : string, instrument : string}
+  {prog, keySig, rhythm, instrument} : 
+  {prog : string[], keySig : string, rhythm : string, instrument : string}
 ) {
+  const parsedInst = JSON.parse(instrument);
   const staveRef = useRef<HTMLDivElement>(null);
+  let clef : string;
+
+  if (parsedInst.octave < 4) clef = "bass";
+    else clef = "treble";
 
   function keySolver() {
     const mode = keySig.split(" ")[1];
@@ -20,15 +25,22 @@ export default function Stave(
   }
 
   function barSolver(chord : string) {
-    if (chord == "") return "D5/w/r";
+    if (chord == "") {
+      if (clef == "treble") return "D5/w/r";
+        else return "F3/w/r";
+    }
 
     const chordSplit = chord.split(" ");
     const degree = Number(chordSplit[0]);
     const mode = chordSplit[1];
     const chordNotes = Chord.get(`${Scale.degrees(keySig)(degree)} ${mode}`).notes;
     const scale = Scale.get(keySig).notes;
+    let indices;
+
+    if (parsedInst.rootOnly) indices = 1;
+      else indices = chordNotes.length;
     
-    for (let n = 0; n < chordNotes.length; n++) {
+    for (let n = 0; n < indices; n++) {
       const note = chordNotes[n];
 
       if (scale.includes(note)) {
@@ -46,9 +58,10 @@ export default function Stave(
     let chordString = "";
     let barString = "";
 
-    for (let n of chordNotes) chordString += `${n}${octave} `;
+    for (let n = 0; n < indices; n++) chordString += `${chordNotes[n]}${parsedInst.octave} `;
 
-    for (let r of rhythmArray) barString += `(${chordString})/${r}, `;
+    if (indices == 1) {for (let r of rhythmArray) barString += `${chordString}/${r}, `;}
+      else {for (let r of rhythmArray) barString += `(${chordString})/${r}, `;}
 
     return barString;
   }
@@ -66,7 +79,7 @@ export default function Stave(
     const notes4 = barSolver(prog[3]);
 
     const factory = new VexFlow.Factory({
-      renderer: { elementId: `${instrument}Stave`, width: 1201, height: 150 },
+      renderer: { elementId: `${parsedInst.name}Stave`, width: 1201, height: 150 },
     });
 
     const score = factory.EasyScore();
@@ -78,31 +91,31 @@ export default function Stave(
     system1
     .addStave({
       voices: [
-      score.voice(score.notes(notes1)),
+      score.voice(score.notes(notes1, {clef: clef})),
       ],
     })
-    .addClef('treble')
+    .addClef(clef)
     .addTimeSignature('4/4')
     .addKeySignature(keySolver());
 
     system2
     .addStave({
       voices: [
-      score.voice(score.notes(notes2)),
+      score.voice(score.notes(notes2, {clef: clef})),
       ],
     })
 
     system3
     .addStave({
       voices: [
-      score.voice(score.notes(notes3)),
+      score.voice(score.notes(notes3, {clef: clef})),
       ],
     })
 
     system4
     .addStave({
       voices: [
-      score.voice(score.notes(notes4)),
+      score.voice(score.notes(notes4, {clef: clef})),
       ],
     }).setEndBarType(VexFlow.Barline.type.END);
 
@@ -110,6 +123,6 @@ export default function Stave(
   })
 
   return (
-    <div ref={staveRef} id={`${instrument}Stave`} className=" m-8 place-items-center"></div>
+    <div ref={staveRef} id={`${parsedInst.name}Stave`} className=" m-8 place-items-center"></div>
   )
 }
