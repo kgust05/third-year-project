@@ -1,16 +1,23 @@
 import Instrument from "./Instrument";
-import {useReducer} from "react";
+import {useReducer, useState, useEffect} from "react";
 
 export default function InstrumentList(
   {instruments, prog, keySig, rhythms} :
   {instruments : string[], prog : string[], keySig : string, rhythms : string[]}
 ) {
   const [currentInstruments, dispatch] = useReducer(instrumentReducer, Array(instruments.length).fill(false));
+  const [instrumentState, setInstruments] = useState(instruments);
 
   function handleUpdateInstruments(index : number) {
     dispatch({
       type: "update",
       index: index
+    })
+  }
+
+  function handleResetInstruments() {
+    dispatch({
+      type: "reset"
     })
   }
 
@@ -22,11 +29,21 @@ export default function InstrumentList(
           return c;
         })
       }
+      case "reset": {
+        return Array(instruments.length).fill(false);
+      }
       default: {
         return currentInstruments;
       }
     }
   }
+
+  useEffect(() => {
+    if (instrumentState != instruments) {
+      setInstruments(instruments);
+      handleResetInstruments();
+    }
+  })
 
   let instrumentList = Array();
 

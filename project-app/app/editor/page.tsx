@@ -1,5 +1,5 @@
 "use client";
-import {useState, useReducer, Suspense} from "react";
+import {useState, useReducer} from "react";
 import ChordEditor from "@/app/components/ChordEditor";
 import RhythmEditor from "@/app/components/RhythmEditor";
 import KeyEditor from "@/app/components/KeyEditor";
@@ -88,41 +88,39 @@ export default function Page() {
       <p>{rhythms}</p>
       <p>{keySig}</p>
       <p>{instruments}</p>
-      <Suspense>
-        <form action={insertNewSong}>
-          <KeyEditor onUpdateKey={handleUpdateKey}/>
-          <ChordEditor
-            onUpdateProgs={progsHandler}
-          />
-          <RhythmEditor
-            onUpdateRhythms={rhythmsHandler}
-            maxBar={4}
-          />
-          <InstrumentEditor onUpdateInstruments={instrumentsHandler}/>
-          <input type="hidden" name="progs" value={JSON.stringify(progs)}></input>
-          <input type="hidden" name="keySig" value={keySig}></input>
-          <input type="hidden" name="rhythms" value={JSON.stringify(rhythms)}></input>
-          <input type="hidden" name="instruments" value={JSON.stringify(instruments)}></input>
-          <label>
-            Song Name: <input name="name"></input>
-          </label>
-          <label>
-            Song Artist: <input name="artist"></input>
-          </label>
-          <label>
-            Description (optional): <textarea name="desc"></textarea>
-          </label>
-          <label>
-            URL (optional): <input type="url" name="embed"></input>
-          </label>
-          <button
-            className="w-36 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400"
-            type="submit"
-          >
-            Add Song
-          </button>
-        </form>
-      </Suspense>
+      <form action={insertNewSong}>
+        <KeyEditor onUpdateKey={handleUpdateKey}/>
+        <ChordEditor
+          onUpdateProgs={progsHandler}
+        />
+        <RhythmEditor
+          onUpdateRhythms={rhythmsHandler}
+          maxBar={4}
+        />
+        <InstrumentEditor onUpdateInstruments={instrumentsHandler}/>
+        <input type="hidden" name="progs" value={JSON.stringify(progs)}></input>
+        <input type="hidden" name="keySig" value={keySig}></input>
+        <input type="hidden" name="rhythms" value={JSON.stringify(rhythms)}></input>
+        <input type="hidden" name="instruments" value={JSON.stringify(instruments)}></input>
+        <label>
+          Song Name: <input name="name"></input>
+        </label>
+        <label>
+          Song Artist: <input name="artist"></input>
+        </label>
+        <label>
+          Description (optional): <textarea name="desc"></textarea>
+        </label>
+        <label>
+          URL (optional): <input type="url" name="embed"></input>
+        </label>
+        <button
+          className="w-36 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400"
+          type="submit"
+        >
+          Add Song
+        </button>
+      </form>
     </div>
   )
 }

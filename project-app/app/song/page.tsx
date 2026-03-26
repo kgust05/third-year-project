@@ -2,7 +2,7 @@
 import {getSongData} from "@/app/lib/data";
 import ChordGrid from "@/app/components/ChordGrid";
 import InstrumentList from "@/app/components/InstrumentList";
-import {useState, useReducer, useEffect} from "react";
+import {useState, useReducer, useEffect, Suspense} from "react";
 import Link from "next/link";
 import {useSearchParams} from "next/navigation";
 
@@ -69,24 +69,26 @@ export default function Page() {
 
   return (
     <div>
-      <h1 className="text-4xl text-center m-8">{artist} - {name}</h1>
-      <p className="text-lg text-center">{desc}</p>
-      <Link href="/">
-        <button className="w-36 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400 m-8">
-          Back to Menu
-        </button>
-      </Link>
-      <InstrumentList
-        instruments={instruments}
-        prog={currentProg}
-        keySig={keySig}
-        rhythms={rhythms}
-      />
-      <ChordGrid
-        progs={progs}
-        currentProg={currentProg}
-        onUpdateCurrentProg={handleUpdateCurrentProg}
-      />
+      <Suspense>
+        <h1 className="text-4xl text-center m-8">{artist} - {name}</h1>
+        <p className="text-lg text-center">{desc}</p>
+        <Link href="/">
+          <button className="w-36 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400 m-8">
+            Back to Menu
+          </button>
+        </Link>
+        <InstrumentList
+          instruments={instruments}
+          prog={currentProg}
+          keySig={keySig}
+          rhythms={rhythms}
+        />
+        <ChordGrid
+          progs={progs}
+          currentProg={currentProg}
+          onUpdateCurrentProg={handleUpdateCurrentProg}
+        />
+      </Suspense>
     </div>
   )
 }
