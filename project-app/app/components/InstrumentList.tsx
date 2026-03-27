@@ -5,6 +5,16 @@ export default function InstrumentList(
   {instruments, prog, keySig, rhythms, onUpdateRhythms} :
   {instruments : any[], prog : string[], keySig : string, rhythms : string[], onUpdateRhythms : Function}
 ) {
+  /**
+   * Component for displaying a collection of {@link Instrument} components.
+   * @param instruments Array of all instruments.
+   * @param prog Chord progression of the current song.
+   * @param keySig Key signature.
+   * @param rhythms All valid rhythms for the song.
+   * @param onUpdateRhythms Function for updating the current rhythm.
+   * @returns JSX element.
+   */
+
   const [currentInstruments, dispatch] = useReducer(instrumentReducer, Array(instruments.length).fill(false));
   const [instrumentState, setInstruments] = useState(instruments);
 
@@ -39,6 +49,7 @@ export default function InstrumentList(
     }
   }
 
+  // Checks if provided instruments have changed, updates state if they have
   useEffect(() => {
     if (instrumentState != instruments) {
       setInstruments(instruments);
@@ -46,6 +57,8 @@ export default function InstrumentList(
     }
   })
 
+  // Creation of JSX element list of all provided instruments
+  // Created buttons also show selection state
   let instrumentList = Array();
 
   for (let i of instruments) {
@@ -57,13 +70,16 @@ export default function InstrumentList(
       instrumentList.push(
         <div
           key={i.name}
+          className="w-full grid gap-3 grid-cols-1 place-items-center"
         >
-          <button
-            className={"w-36 h-12 rounded-full " + styleString}
-            onClick={() => handleUpdateInstruments(index)}
-          >
-            Toggle {i.name}
-          </button>
+          <div>
+            <button
+              className={"w-36 h-12 rounded-full " + styleString}
+              onClick={() => handleUpdateInstruments(index)}
+            >
+              Toggle {i.name}
+            </button>
+          </div>
           <Instrument
             instrument={JSON.stringify(i)}
             prog={prog}
@@ -80,13 +96,17 @@ export default function InstrumentList(
       instrumentList.push(
         <div
           key={i.name}
+          className="w-full grid gap-3 grid-cols-1 place-items-center"
         >
-          <button
+          <div>
+            <button
             className={"w-36 h-12 rounded-full " + styleString}
             onClick={() => handleUpdateInstruments(index)}
-          >
+            >
             Toggle {i.name}
           </button>
+          </div>
+          <div></div>
         </div>
       )
     }
@@ -94,7 +114,7 @@ export default function InstrumentList(
 
   return (
     <div className="grid gap-3 grid-cols-1 place-items-center">
-      <h1 className="text-3xl text-center m-8">Choose your instruments</h1>
+      <h1 className="font-semibold text-3xl text-center m-8">Choose your instruments</h1>
       {instrumentList}
     </div>
   )

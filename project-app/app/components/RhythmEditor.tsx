@@ -6,6 +6,14 @@ export default function RhythmEditor(
   {onUpdateRhythms, maxBar, onUpdateCurrent} :
   {onUpdateRhythms : Function, maxBar : number, onUpdateCurrent : Function}
 ) {
+  /**
+   * Component for adding rhythms in the editor.
+   * @param onUpdateRhythms Function for adding a rhythm.
+   * @param maxBar Maximum number of beats allowed in a bar.
+   * @param onUpdateCurrent Function for updating the current rhythm to be added.
+   * @returns JSX element.
+   */
+
   const [rhythm, dispatch] = useReducer(rhythmReducer, Array());
   const [barLength, setBarLength] = useState(0);
   const [noteLengths, setNoteLengths] = useState(Array());
@@ -54,6 +62,8 @@ export default function RhythmEditor(
     }
   }
 
+  // Turns a rhythm string into a readable list of notes
+  // in the order they appear in the rhythm
   function translateRhythm(rhythm : string) {
     let rhythmString = Array();
     const parts = rhythm.split(" ");
@@ -94,12 +104,14 @@ export default function RhythmEditor(
     return rhythmString.join(", ");
   }
 
-
+  // Creates the button to add a rhythm to the song
+  // Disabled if the length of the rhythm does not match
+  // the bar length
   function createAddButton() {
     if (barLength == maxBar) return (
       <button
         type="button"
-        className="w-36 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400"
+        className="w-36 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400 m-8"
         onClick={() => onUpdateRhythms("add", undefined, rhythm.join(" "))}
       >
         Add Rhythm
@@ -109,7 +121,7 @@ export default function RhythmEditor(
       <div>
         <button
           type="button"
-          className="w-36 h-12 rounded-full bg-gray-500 text-black"
+          className="w-36 h-12 rounded-full bg-gray-500 text-black m-8"
           disabled
         >
           Add Rhythm
@@ -119,8 +131,13 @@ export default function RhythmEditor(
   }
 
   return (
-    <div className="grid grid-flow-row gap-3 grid-cols-3 place-items-center">
+    <div className="grid grid-flow-row gap-3 grid-cols-1 place-items-center">
+      <h1 className="text-2xl text-center font-semibold">Rhythm</h1>
+      <p>The selected rhythm <b>must </b> fill the bar.</p>
+      <h2 className="text-center font-semibold">Current rhythm</h2>
       <p>{translateRhythm(rhythm.join(" "))}</p>
+      <h2 className="text-center font-semibold">Current length</h2>
+      <p>{barLength}</p>
       <RhythmSelector
         barLength={4}
         totalLength={barLength}

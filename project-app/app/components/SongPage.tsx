@@ -8,6 +8,11 @@ import Link from "next/link";
 import {useSearchParams} from "next/navigation";
 
 export default function SongPage() {
+  /**
+   * Page component for displaying a song.
+   * @returns JSX element.
+   */
+
   const searchParams = useSearchParams();
   const [progs, setProgs] = useState([["1 major", "1 major", "1 major", "1 major"]]);
   const [keySig, setKeySig] = useState("C major");
@@ -29,6 +34,7 @@ export default function SongPage() {
   const [currentProg, progDispatch] = useReducer(progReducer, Array(4).fill(""));
   const [currentRhythms, rhythmsDispatch] = useReducer(rhythmsReducer, Array(instruments.length).fill(""));
   
+  // Sets all data states from provided data
   function setData(data : any) {
     setProgs(data.progs);
     setKeySig(data.key_sig);
@@ -41,6 +47,8 @@ export default function SongPage() {
     setTempo(data.tempo);
   }
 
+  // Loads data and updates the current rhythm length
+  // once after first render 
   useEffect(() => {
     if (!dataLoaded) {
       getSongData(parseInt(searchParams.get("song_id")!)).then(data => {
@@ -115,6 +123,7 @@ export default function SongPage() {
     }
   }
 
+  // Creates a YouTube embed if an embed is provided
   function createEmbed() {
     if (embed != "") {
       return (
@@ -134,13 +143,16 @@ export default function SongPage() {
     else return null;
   }
 
+  // Creates button that redirects to page that
+  // searches for songs with the same selected chord progression
+  // in their list of valid progressions
   function createFindWithChords() {
     for (let c of currentProg) {
       if (c == "") return (
         <div>
           <button
             type="button"
-            className="w-60 h-12 rounded-full bg-gray-500 text-black m-8"
+            className="w-auto px-6 h-12 rounded-full bg-gray-500 text-black"
             disabled
           >
             Find songs with these chords
@@ -155,12 +167,11 @@ export default function SongPage() {
           href={{
             pathname: "/findwithchords",
             query: {
-              prog: JSON.stringify(currentProg),
-              id: searchParams.get("song_id")
+              prog: JSON.stringify(currentProg)
             }
           }}
           >
-          <button className="w-60 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400 m-8">
+          <button className="w-auto px-6 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400">
             Find songs with these chords
           </button>
         </Link>
@@ -169,23 +180,11 @@ export default function SongPage() {
   }
 
   return (
-    <div>
-      <h1 className="text-4xl text-center m-8">{artist} - {name}</h1>
-      <p className="text-lg text-center">{desc}</p>
+    <div className="font-sans w-full grid grid-cols-1 place-items-center">
+      <h1 className="text-4xl font-bold text-center m-8">{artist} - {name}</h1>
       {createEmbed()}
-      <Link href="/">
-        <button className="w-36 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400 m-8">
-          Back to Menu
-        </button>
-      </Link>
-      {createFindWithChords()}
-      <SongPlayer
-        keySig={keySig}
-        prog={currentProg}
-        instruments={instruments}
-        rhythms={currentRhythms}
-        tempo={tempo}
-      />
+      <p className="text-lg text-center m-8">{desc}</p>
+      <p className="text-lg text-center m-8">You can make your own variation of this song below!</p>
       <InstrumentList
         instruments={instruments}
         prog={currentProg}
@@ -199,6 +198,16 @@ export default function SongPage() {
         onUpdateCurrentProg={handleUpdateCurrentProg}
         keySig={keySig}
       />
+      <div className="w-1/2 grid gap-3 grid-cols-1 place-items-center">
+        {createFindWithChords()}
+        <SongPlayer
+          keySig={keySig}
+          prog={currentProg}
+          instruments={instruments}
+          rhythms={currentRhythms}
+          tempo={tempo}
+        />
+      </div>
     </div>
   )
 }

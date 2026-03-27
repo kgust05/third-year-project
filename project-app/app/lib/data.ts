@@ -1,8 +1,8 @@
 "use server"
 import {neon} from "@neondatabase/serverless";
-import { Console } from "console";
 import {redirect} from "next/navigation";
 
+// Gets all data for a specific song
 export async function getSongData(id : number) {
   const sql = neon(`${process.env.DATABASE_URL}`);
   const data = await sql`SELECT * FROM songs WHERE song_id = ${id}`;
@@ -10,6 +10,7 @@ export async function getSongData(id : number) {
   return data[0];
 }
 
+// Gets all song data
 export async function getAllData() {
   const sql = neon(`${process.env.DATABASE_URL}`);
   const data = await sql`SELECT * FROM songs`;
@@ -17,6 +18,7 @@ export async function getAllData() {
   return data;
 }
 
+// Inserts a new song with the provided values into the database
 export async function insertNewSong(formData : FormData) {
   const sql = neon(`${process.env.DATABASE_URL}`);
   const name = formData.get("name");
@@ -35,10 +37,11 @@ export async function insertNewSong(formData : FormData) {
   redirect("/");
 }
 
-export async function selectWithProg(prog : string, id : string) {
+// Gets all songs that contain the provided chord progression
+// in their list of valid progressions
+export async function selectWithProg(prog : string) {
   const sql = neon(`${process.env.DATABASE_URL}`);
-  const progQuery = (prog).replaceAll("[", "{").replaceAll("]", "}");
-  const idQuery = id;
+  const progQuery = (prog).replaceAll("[", "{").replaceAll("]", "}");;
 
   const data = await sql`SELECT * FROM songs
   WHERE progs @> ${progQuery}`

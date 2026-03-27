@@ -5,6 +5,15 @@ export default function RhythmSelector(
   {barLength, totalLength, onUpdateRhythm, onDeleteNote} :
   {barLength : number, totalLength : number, onUpdateRhythm : Function, onDeleteNote : Function}
 ) {
+  /**
+   * Component for selecting rhythms in the editor.
+   * @param barLength Maximum length of a bar.
+   * @param totalLength The current length of the created rhythm.
+   * @param onUpdateRhythm Function for updating the current rhythm being created.
+   * @param onDeleteNote Function for removing a note from the rhythm.
+   * @returns JSX element.
+   */
+
   const [note, setNote] = useState("w");
   const [dot, setDot] = useState(false);
 
@@ -16,6 +25,9 @@ export default function RhythmSelector(
     setDot(!dot);
   }
 
+  // Gets length of the current note
+  // Has parameter for always making it a dotted note
+  // for checking if a dotted note can be added
   function getLength(fixDot : Boolean) {
     let length;
 
@@ -54,11 +66,13 @@ export default function RhythmSelector(
     return length;
   }
 
+  // Checks if a note can be added
   function validNote(length : number) {
     if (length + totalLength > barLength) return false;
     return true;
   }
 
+  // Adds note to the rhythm
   function addNote() {
     let fullNote = note;
     const length = getLength(false);
@@ -70,6 +84,9 @@ export default function RhythmSelector(
     onUpdateRhythm(fullNote, length);
   }
 
+  // Creates button for making a dotted note
+  // Disabled if the dotted variant of current
+  // note cannot be added
   function createDotButton() {
     if (validNote(getLength(true))) {
       if (dot) return (
@@ -107,6 +124,7 @@ export default function RhythmSelector(
       )  
   }
 
+  // Creates button that adds a note to the rhythm
   function createAddButton() {
     if (validNote(getLength(false))) return (
         <div>
@@ -132,30 +150,30 @@ export default function RhythmSelector(
     )
   }
 
+  // Checks if a dotted note can be added, disabled dot if it cannot
   useEffect(() => {
     if (!validNote(getLength(true))) setDot(false);
   })
 
   return (
-    <div className="grid grid-flow-row gap-3 grid-cols-3 place-items-center">
-      <div>
-        Note:
+    <div className="grid grid-flow-row gap-3 grid-cols-4 place-items-center">
+
         <select
           value={note}
           onChange={e => handleUpdateNote(e.target.value)}
+          className="w-full px-3 py-2.5 bg-[#bc9dcc] border border-[#906fa1] text-sm rounded-xl"
         >
           <option value="w" disabled={!validNote(4)}>Semibreve/Whole Note</option>
           <option value="h" disabled={!validNote(2)}>Minim/Half Note</option>
           <option value="q" disabled={!validNote(1)}>Crotchet/Quarter Note</option>
           <option value="8" disabled={!validNote(0.5)}>Quaver/Eighth Note</option>
         </select>
-      </div>
       {createDotButton()}
       {createAddButton()}
       <div>
         <button
           type="button"
-          className="w-36 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400"
+          className="w-36 h-12 rounded-full bg-red-800 text-white hover:bg-red-700 active:bg-red-600"
           onClick={() => onDeleteNote()}
         >
           Delete Note

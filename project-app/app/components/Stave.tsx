@@ -6,13 +6,24 @@ export default function Stave(
   {prog, keySig, rhythm, instrument} : 
   {prog : string[], keySig : string, rhythm : string, instrument : string}
 ) {
+  /**
+   * Component for displaying music notes on a stave.
+   * @param prog Chord progression.
+   * @param keySig Key signature.
+   * @param rhythm Rhythm to display.
+   * @param instrument Stringified JSON object containing info on the instrument playing on this stave.
+   * @returns JSX element.
+   */
+
   const parsedInst = JSON.parse(instrument);
-  const staveRef = useRef<HTMLDivElement>(null);
+  const staveRef = useRef<HTMLDivElement>(null); // Reference for where the stave will be placed
   let clef : string;
 
+  // Gets correct clef for the provided notes
   if (parsedInst.octave < 4) clef = "bass";
-    else clef = "treble";
+  else clef = "treble";
 
+  // Returns note to be used to generate the key signature
   function keySolver() {
     const mode = keySig.split(" ")[1];
     const sig = Scale.degrees(keySig);
@@ -24,6 +35,7 @@ export default function Stave(
     }
   }
 
+  // Returns Vexflow EasyScore notation for a chord
   function barSolver(chord : string) {
     if (chord == "" || rhythm == "") {
       if (clef == "treble") return "D5/w/r";
@@ -66,6 +78,8 @@ export default function Stave(
     return barString;
   }
 
+  // Creates the stave and all
+  // current configured notes
   useEffect(() => {
     const stave = staveRef.current!;
 

@@ -7,8 +7,19 @@ export default function SongPlayer(
   {prog, keySig, instruments, rhythms, tempo} : 
   {prog : string[], keySig : string, instruments : any[], rhythms : string[], tempo : number}
 ) {
+  /**
+   * Component for allowing playback of a created phrase of music.
+   * @param prog Chord progression.
+   * @param keySig Key signature of the phrase.
+   * @param instruments All instruments in the song.
+   * @param rhythms Rhythms of the corresponding instruments.
+   * @param tempo The tempo in beats per minute of the song.
+   * @returns JSX element.
+   */
+
   const actx = useRef(new AudioContext());
 
+  // Gets notes of a chord
   function getChord(chord : string, octave : number) {
     const chordSplit = chord.split(" ");
     const degree = Number(chordSplit[0]);
@@ -20,6 +31,7 @@ export default function SongPlayer(
     return chordNotes;
   }
 
+  // Gets length of a note
   function getLength(note : string) {
     let length;
 
@@ -53,6 +65,7 @@ export default function SongPlayer(
     return length;
   }
 
+  // Gets lengths of all notes in a rhythm
   function rhythmSolver(rhythm : string) {
     const rhythmSplit = rhythm.split(" ");
     const lengths = Array();
@@ -64,6 +77,7 @@ export default function SongPlayer(
     return lengths;
   }
 
+  // Plays sound for a single instrument
   function play(instrument : Soundfont, octave : number = 4, rootOnly : Boolean = false, rhythm : string, beat : number) {
     let voice1 = Array();
     let voice2 = Array();
@@ -115,6 +129,7 @@ export default function SongPlayer(
 
   let beat = 60 / tempo;
 
+  // Plays sound for all instruments
   function playAll() {
     for (let i = 0; i < instruments.length; i++) {
       play(
@@ -126,6 +141,7 @@ export default function SongPlayer(
     }
   }
 
+  // Checks if any chord in the progression is empty
   function checkEmptyChord() {
     for (let c of prog) {
       if (c == "") return true;
@@ -134,13 +150,15 @@ export default function SongPlayer(
     return false;
   }
 
+  // Creates play button
+  // Disabled if chord progression is incomplete
   function createPlayButton() {
     if (checkEmptyChord()) {
       return (
         <div>
           <button
             type="button"
-            className="w-36 h-12 rounded-full bg-gray-500 text-black m-8"
+            className="w-36 h-12 rounded-full bg-gray-500 text-black mb-8"
             disabled
           >
             Play Phrase
@@ -152,7 +170,7 @@ export default function SongPlayer(
       return (
         <div>
           <button
-            className="w-36 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400 m-8"
+            className="w-36 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400 mb-8"
             onClick={() => playAll()}
           >
             Play Phrase
