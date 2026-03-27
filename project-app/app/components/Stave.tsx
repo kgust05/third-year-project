@@ -25,7 +25,7 @@ export default function Stave(
   }
 
   function barSolver(chord : string) {
-    if (chord == "") {
+    if (chord == "" || rhythm == "") {
       if (clef == "treble") return "D5/w/r";
         else return "F3/w/r";
     }

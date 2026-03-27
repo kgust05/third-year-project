@@ -1,6 +1,8 @@
+import {Chord, Scale} from "tonal";
+
 export default function ChordGrid(
-    {progs, currentProg, onUpdateCurrentProg}
-    : {progs : string[][], currentProg : string[], onUpdateCurrentProg : Function}
+    {progs, currentProg, onUpdateCurrentProg, keySig}
+    : {progs : string[][], currentProg : string[], onUpdateCurrentProg : Function, keySig : string}
 ) {
   let chordGrid = Array();
   let uniqueChords = getUniqueChords(progs);
@@ -44,6 +46,15 @@ export default function ChordGrid(
     return false;
   }
 
+  function chordName(chord : string) {
+    const chordSplit = chord.split(" ");
+    const degree = Number(chordSplit[0]);
+    const mode = chordSplit[1];
+    const chordName = Chord.get(`${Scale.degrees(keySig)(degree)} ${mode}`).name;
+
+    return chordName;
+  }
+
   function createButton(chord : string, bar : number) {
     if (checkValidChord(chord, bar)) {
       let styleString;
@@ -57,7 +68,7 @@ export default function ChordGrid(
           className={"w-24 h-12 rounded-full " + styleString}
           onClick={() => onUpdateCurrentProg(chord, bar)}
         >
-          {chord}
+          {chordName(chord)}
         </button>
       )
     }
@@ -68,7 +79,7 @@ export default function ChordGrid(
         className="w-24 h-12 rounded-full bg-gray-500 text-black"
         disabled
       >
-        {chord}
+        {chordName(chord)}
       </button>
     )
   }

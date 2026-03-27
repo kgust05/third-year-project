@@ -3,7 +3,7 @@ import {getSongData} from "@/app/lib/data";
 import ChordGrid from "@/app/components/ChordGrid";
 import InstrumentList from "@/app/components/InstrumentList";
 import SongPlayer from "@/app/components/SongPlayer";
-import {useState, useReducer, useEffect, useRef} from "react";
+import {useState, useReducer, useEffect} from "react";
 import Link from "next/link";
 import {useSearchParams} from "next/navigation";
 
@@ -18,38 +18,41 @@ export default function SongPage() {
       inst: "acoustic_grand_piano",
       octave: 4,
       rootOnly: false
-    },
-    {
-      name: "Bass",
-      inst: "acoustic_bass",
-      octave: 2,
-      rootOnly: true
     }
   ]);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [name, setName] = useState("");
   const [artist, setArtist] = useState("");
   const [desc, setDesc] = useState(null);
+  const [embed, setEmbed] = useState("");
+  const [tempo, setTempo] = useState(120);
+  const [currentProg, progDispatch] = useReducer(progReducer, Array(4).fill(""));
+  const [currentRhythms, rhythmsDispatch] = useReducer(rhythmsReducer, Array(instruments.length).fill(""));
   
   function setData(data : any) {
     setProgs(data.progs);
     setKeySig(data.key_sig);
     setRhythms(data.rhythms);
-    //setInstruments(data.instruments);
+    setInstruments(data.instruments);
     setName(data.name);
     setArtist(data.artist);
     setDesc(data.description);
+    setEmbed(data.embed);
+    setTempo(data.tempo);
   }
 
   useEffect(() => {
     if (!dataLoaded) {
-      getSongData(parseInt(searchParams.get("song_id")!)).then(data => setData(data));
+      getSongData(parseInt(searchParams.get("song_id")!)).then(data => {
+        setData(data)
+
+        if (data.instruments.length != currentRhythms.length) {
+          handleResetCurrentRhythms(data.instruments.length);
+        }
+      });
       setDataLoaded(true);
     }
   })
-
-  const [currentProg, progDispatch] = useReducer(progReducer, Array(4).fill(""));
-  const [currentRhythms, rhythmsDispatch] = useReducer(rhythmsReducer, Array(instruments.length).fill(""));
 
   function handleUpdateCurrentProg(chord : string, index : number) {
     progDispatch({
@@ -64,6 +67,13 @@ export default function SongPage() {
       type: "update",
       rhythm: rhythm,
       index: index
+    })
+  }
+
+  function handleResetCurrentRhythms(length : number) {
+    rhythmsDispatch({
+      type: "reset",
+      length: length
     })
   }
 
@@ -96,28 +106,85 @@ export default function SongPage() {
           return r;
         })
       }
+      case "reset": {
+        return Array(action.length).fill("");
+      }
       default: {
         return rhythms;
       }
     }
   }
 
+  function createEmbed() {
+    if (embed != "") {
+      return (
+        <div className="place-items-center">
+          <iframe
+          width="560"
+          height="315"
+          src={embed}
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerPolicy="strict-origin-when-cross-origin" allowFullScreen
+        ></iframe>
+        </div>
+      )
+    }
+    else return null;
+  }
+
+  function createFindWithChords() {
+    for (let c of currentProg) {
+      if (c == "") return (
+        <div>
+          <button
+            type="button"
+            className="w-60 h-12 rounded-full bg-gray-500 text-black m-8"
+            disabled
+          >
+            Find songs with these chords
+          </button>
+        </div>
+      )
+    }
+
+    return (
+      <div>
+        <Link
+          href={{
+            pathname: "/findwithchords",
+            query: {
+              prog: JSON.stringify(currentProg),
+              id: searchParams.get("song_id")
+            }
+          }}
+          >
+          <button className="w-60 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400 m-8">
+            Find songs with these chords
+          </button>
+        </Link>
+      </div>
+    )
+  }
+
   return (
     <div>
       <h1 className="text-4xl text-center m-8">{artist} - {name}</h1>
       <p className="text-lg text-center">{desc}</p>
-      <p>{currentRhythms}</p>
+      {createEmbed()}
       <Link href="/">
         <button className="w-36 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400 m-8">
           Back to Menu
         </button>
       </Link>
+      {createFindWithChords()}
       <SongPlayer
         keySig={keySig}
         prog={currentProg}
         instruments={instruments}
         rhythms={currentRhythms}
-        tempo={150}
+        tempo={tempo}
       />
       <InstrumentList
         instruments={instruments}
@@ -130,6 +197,7 @@ export default function SongPage() {
         progs={progs}
         currentProg={currentProg}
         onUpdateCurrentProg={handleUpdateCurrentProg}
+        keySig={keySig}
       />
     </div>
   )

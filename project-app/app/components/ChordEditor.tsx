@@ -3,8 +3,8 @@ import {useReducer} from "react";
 import ChordSelector from "./ChordSelector";
 
 export default function ChordEditor(
-  {onUpdateProgs} :
-  {onUpdateProgs : Function}
+  {onUpdateProgs, onUpdateCurrent} :
+  {onUpdateProgs : Function, onUpdateCurrent : Function}
 ) {
   const [chords, dispatch] = useReducer(chordsReducer, Array(4).fill("1 major"));
 
@@ -14,6 +14,7 @@ export default function ChordEditor(
       index: index,
       chord: chord
     })
+    onUpdateCurrent(index, chord);
   }
 
   function chordsReducer(chords : string[], action : any) {

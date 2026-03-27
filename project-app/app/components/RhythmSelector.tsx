@@ -7,7 +7,6 @@ export default function RhythmSelector(
 ) {
   const [note, setNote] = useState("w");
   const [dot, setDot] = useState(false);
-  const [rest, setRest] = useState(false);
 
   function handleUpdateNote(note : string) {
     setNote(note);
@@ -15,10 +14,6 @@ export default function RhythmSelector(
 
   function handleUpdateDot() {
     setDot(!dot);
-  }
-
-  function handleUpdateRest() {
-    setRest(!rest);
   }
 
   function getLength(fixDot : Boolean) {
@@ -72,10 +67,6 @@ export default function RhythmSelector(
       fullNote += ".";
     }
 
-    if (rest) {
-      fullNote += "/r";
-    }
-
     onUpdateRhythm(fullNote, length);
   }
 
@@ -116,31 +107,6 @@ export default function RhythmSelector(
       )  
   }
 
-  function createRestButton() {
-    if (rest) return (
-      <div>
-        <button
-          type="button"
-          className="w-36 h-12 rounded-full bg-fuchsia-600 text-white hover:bg-fuchsia-400 active:bg-fuchsia-200"
-          onClick={() => handleUpdateRest()}
-        >
-          Toggle Rest
-        </button>
-      </div>
-    )
-    else return (
-      <div>
-        <button
-          type="button"
-          className="w-36 h-12 rounded-full bg-purple-800 text-white hover:bg-purple-600 active:bg-purple-400"
-          onClick={() => handleUpdateRest()}
-        >
-          Toggle Rest
-        </button>
-      </div>
-    )
-  }
-
   function createAddButton() {
     if (validNote(getLength(false))) return (
         <div>
@@ -172,10 +138,8 @@ export default function RhythmSelector(
 
   return (
     <div className="grid grid-flow-row gap-3 grid-cols-3 place-items-center">
-      <p>{getLength(false)}</p>
-      <p>{note}</p>
       <div>
-        Note
+        Note:
         <select
           value={note}
           onChange={e => handleUpdateNote(e.target.value)}
@@ -187,7 +151,6 @@ export default function RhythmSelector(
         </select>
       </div>
       {createDotButton()}
-      {createRestButton()}
       {createAddButton()}
       <div>
         <button

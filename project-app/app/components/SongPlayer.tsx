@@ -1,5 +1,5 @@
 "use client";
-import {RefObject, useRef} from "react";
+import {useRef} from "react";
 import {Soundfont} from "smplr";
 import {Scale, Chord} from "tonal";
 

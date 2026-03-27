@@ -6,7 +6,7 @@ export default function Instrument(
   {instrument, prog, keySig, rhythms, onUpdateRhythms, index} :
   {instrument : string, prog : string[], keySig : string, rhythms : string[], onUpdateRhythms : Function, index : number}
 ) {
-  const [currentRhythm, dispatch] = useReducer(rhythmReducer, "w");
+  const [currentRhythm, dispatch] = useReducer(rhythmReducer, "");
 
   function handleUpdateCurrentRhythm(rhythm : string) {
     dispatch({
@@ -27,6 +27,12 @@ export default function Instrument(
   return (
     <div>
       <h1 className="text-3xl text-center m-8">{JSON.parse(instrument).name} line</h1>
+      <Stave
+        instrument={instrument}
+        prog={["1 major", "1 major", "1 major", "1 major"]}
+        keySig={keySig}
+        rhythm={"h h"}
+      />
       <Stave
         instrument={instrument}
         prog={prog}

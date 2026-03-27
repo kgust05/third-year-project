@@ -1,5 +1,6 @@
 "use server"
 import {neon} from "@neondatabase/serverless";
+import { Console } from "console";
 import {redirect} from "next/navigation";
 
 export async function getSongData(id : number) {
@@ -26,9 +27,21 @@ export async function insertNewSong(formData : FormData) {
   const instruments = (formData.get("instruments") as string).replaceAll("[", "{").replaceAll("]", "}");
   const desc = formData.get("desc");
   const embed = formData.get("embed");
+  const tempo = formData.get("tempo");
 
-  await sql`INSERT INTO songs (name, artist, progs, key_sig, rhythms, instruments, description, embed)
-  VALUES (${name}, ${artist}, ${progs}, ${keySig}, ${rhythms}, ${instruments}, ${desc}, ${embed})`
+  await sql`INSERT INTO songs (name, artist, progs, key_sig, rhythms, instruments, description, embed, tempo)
+  VALUES (${name}, ${artist}, ${progs}, ${keySig}, ${rhythms}, ${instruments}, ${desc}, ${embed}, ${tempo})`
 
   redirect("/");
+}
+
+export async function selectWithProg(prog : string, id : string) {
+  const sql = neon(`${process.env.DATABASE_URL}`);
+  const progQuery = (prog).replaceAll("[", "{").replaceAll("]", "}");
+  const idQuery = id;
+
+  const data = await sql`SELECT * FROM songs
+  WHERE progs @> ${progQuery}`
+
+  return data;
 }
